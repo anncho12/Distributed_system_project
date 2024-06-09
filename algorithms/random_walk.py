@@ -6,7 +6,7 @@ def random_walk(graph, start_node, steps):
     visited = {current_node}
 
     for _ in range(steps):
-        # print(f"Visited {current_node}")
+        yield current_node  # 노드 방문을 반환
         neighbors = list(graph.neighbors(current_node))
         if not neighbors:
             break
