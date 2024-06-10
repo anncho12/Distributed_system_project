@@ -18,17 +18,3 @@ def k_random_walk(graph, start_node, k):
             else:
                 selected_neighbors = random.sample(neighbors, k)
             to_visit.extend(neighbor for neighbor in selected_neighbors if neighbor not in visited)
-
-# 예제 사용
-if __name__ == "__main__":
-    G = nx.erdos_renyi_graph(10, 0.5)  # 예제 그래프 생성
-    start_node = 0
-    k = 2  # 한 번에 방문할 이웃 노드의 수
-
-    print("Flooding (BFS) Order with K Neighbors:")
-    for node in k_random_walk(G, start_node, k):
-        print(node)
-
-    G = nx.erdos_renyi_graph(10, 0.5)  # 예제 그래프 생성
-    nx.draw(G, with_labels=True)
-    plt.show()

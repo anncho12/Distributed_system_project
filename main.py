@@ -93,12 +93,14 @@ if __name__ == "__main__":
     # G_scale_free = nx.barabasi_albert_graph(n=100, m=3)
     # graphs.append((G_scale_free, nx.spring_layout, "Scale-Free Network"))
 
-    
 
-    # G_centralized = nx.complete_graph(n=100)  # 중앙 집중식 그래프 생성
-    # G_decentralized = nx.erdos_renyi_graph(n=100, p=0.3)  # 분산식 그래프 생성
-    # G_p2p = nx.barabasi_albert_graph(n=100, m=3)  # P2P 그래프 생성
-    G_server_client = create_distributed_graph(num_servers=5, clients_per_server=50)  # 서버-클라이언트 그래프 생성
+    G_server_client = create_distributed_graph(num_servers=100, clients_per_server=1000)  # 서버-클라이언트 그래프 생성
+    G_centralized = nx.complete_graph(n=10000)  # 중앙 집중식 그래프 생성
+    G_decentralized = nx.erdos_renyi_graph(n=10000, p=0.3)  # 분산식 그래프 생성
+    G_p2p = nx.barabasi_albert_graph(n=10000, m=3)  # P2P 그래프 생성
+
+
+    # G_server_client = create_distributed_graph(num_servers=5, clients_per_server=50)  # 서버-클라이언트 그래프 생성
 
     # graphs.append((G_centralized, nx.spring_layout, "Centralized Network"))
     # graphs.append((G_decentralized, nx.spring_layout, "Decentralized Network"))

@@ -1,4 +1,5 @@
 import time
+from matplotlib import pyplot as plt
 import networkx as nx
 from algorithms.flooding import flooding
 from algorithms.random_walk import random_walk
@@ -33,6 +34,7 @@ def recommend_algorithm(G):
     random_walk_time, random_walk_ratio = measure_time_and_propagation(random_walk, G, start_node, steps)
     gossip_time, gossip_ratio = measure_time_and_propagation(gossip, G, start_node, prob)
     k_random_walk_time, k_random_walk_ratio = measure_time_and_propagation(k_random_walk, G, start_node, 3)
+    #여기서는 k=3
 
     times = {
         "Flooding": flooding_time,
@@ -57,7 +59,7 @@ def recommend_algorithm(G):
     for algorithm, time_taken in sorted_times:
         propagation_ratio = propagation_ratios[algorithm]
         print(f"{algorithm}: {time_taken:.6f} seconds, Propagation Ratio: {propagation_ratio:.2%}")
-        print(f"{algorithm}: {time_taken:.6f} seconds, Propagation Ratio: {propagation_ratio}")
+        # print(f"{algorithm}: {time_taken:.6f} seconds, Propagation Ratio: {propagation_ratio}")
 
         if propagation_ratio >= min_propagation_ratio and time_taken < best_time:
             best_algorithm = algorithm
@@ -68,13 +70,31 @@ def recommend_algorithm(G):
 
     return best_algorithm
 
-if __name__ == "__main__":
-    G_server_client = create_distributed_graph(num_servers=100, clients_per_server=1000)  # 서버-클라이언트 그래프 생성
-    G_centralized = nx.complete_graph(n=10000)  # 중앙 집중식 그래프 생성
-    G_decentralized = nx.erdos_renyi_graph(n=10000, p=0.3)  # 분산식 그래프 생성
-    G_p2p = nx.barabasi_albert_graph(n=10000, m=3)  # P2P 그래프 생성
+def visualize_graph(G, title):
+    plt.figure(figsize=(10, 10))
+    pos = nx.kamada_kawai_layout(G)  # 노드 배치를 위해 spring layout 사용
+    nx.draw(G, pos, node_size=10, node_color='blue', with_labels=False)
+    plt.title(title)
+    plt.show()
 
-    recommend_algorithm(G_server_client)
-    recommend_algorithm(G_centralized)
-    recommend_algorithm(G_decentralized)
-    recommend_algorithm(G_p2p)
+
+if __name__ == "__main__":
+    G_decentralized = create_distributed_graph(num_servers=100, clients_per_server=1000)  # 서버-클라이언트 그래프 생성
+    G_dense = nx.complete_graph(n=10000)  # 중앙 집중식 그래프 생성
+    G_p2p1 = nx.erdos_renyi_graph(n=10000, p=0.3)  # 분산식 그래프 생성
+    G_p2p2 = nx.barabasi_albert_graph(n=10000, m=3)  # P2P 그래프 생성
+
+    # G_server_client = create_distributed_graph(num_servers=5, clients_per_server=10)  # 서버-클라이언트 그래프 생성
+    # G_centralized = nx.complete_graph(n=50)  # 중앙 집중식 그래프 생성
+    # G_decentralized = nx.erdos_renyi_graph(n=50, p=0.3)  # 분산식 그래프 생성
+    # G_p2p = nx.barabasi_albert_graph(n=50, m=3)  # P2P 그래프 생성
+
+    visualize_graph(G_decentralized, "Server-Client Distributed Graph")
+    visualize_graph(G_dense, "Centralized Graph")
+    visualize_graph(G_p2p1, "Decentralized Graph")
+    visualize_graph(G_p2p2, "Peer-to-Peer (P2P) Graph")
+
+    # recommend_algorithm(G_server_client)
+    # recommend_algorithm(G_centralized)
+    # recommend_algorithm(G_decentralized)
+    # recommend_algorithm(G_p2p)
